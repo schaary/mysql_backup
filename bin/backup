@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+require 'awesome_print'
+require 'mysql2'
+require 'sequel'
+require 'thor'
+
+
+class Backup < Thor
+  
+  desc 'fetch','fetch some test data'
+  def fetch
+    connect
+
+    @mysql[:SCHEMATA].map do |record|
+      ap record
+    end
+   
+
+  end
+
+private
+  def connect
+    @mysql = Sequel.mysql2 \
+      host: ENV['MYSQL_ITZ_ROOT_HOST'],
+      username: ENV['MYSQL_ITZ_ROOT_USER'],
+      password: ENV['MYSQL_ITZ_ROOT_PASSWORD'],
+      database: "information_schema"
+  end
+end
+
+Backup.start
